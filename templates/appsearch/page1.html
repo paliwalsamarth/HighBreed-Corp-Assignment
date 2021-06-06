@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title> App Searcher </title>
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="row">
+<div class="col vertical-center text-theme">
+<form id="form" method="post" action="#">
+{% csrf_token %}
+<input type="hidden" id="formURL" name="formURL" value="{% url 'appsearch:index' %}">
+<h3 class="cover-heading">Select the Store</h3><br>
+
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="storeName" id="id_storeName_0" value="android" required>
+  <label class="form-check-label" for="id_storeName_0">
+    Google Play Store
+  </label>
+</div>
+
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="storeName" id="id_storeName_1" value="apple" required>
+  <label class="form-check-label" for="id_storeName_1">
+    Apple App Store
+  </label>
+</div>
+<br>
+  <div class="form-group" id="appIDdiv" style="display: none;">
+    <label for="appID">Input App ID</label>
+    <input class="form-control" type="text" id="{{ form.appID.id_for_label }}" name="appID" placeholder="Enter App ID">
+  </div>
+
+  <div class="form-group" id="appNamediv" style="display: none;">
+    <label for="appName">Input App Name</label>
+    <input class="form-control" type="text" id="{{ form.appName.id_for_label }}" name="appName" placeholder="Enter App Name">
+  </div>
+
+
+  <button type="submit" id="submitBtn" class="lead btn btn-lg btn-secondary">
+    <div id="submitBtnLoad" style="display:none;">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...
+    </div>
+    <div id="submitBtnInitial"> 
+      Get Info
+    </div>
+  </button>
+</form>
+</div>
+
+<div class="col vertical-center" id="outputAppInfoCard" style="visibility:hidden;">
+  <div class="align-middle">
+    <div class="container">
+            <div class="card bg-light" style="width:25rem">
+                <div class="text-center" style="display:flex;align-items:center;overflow:hidden;max-height:15rem;">
+                    <img id="outputAppImg" class="card-img-top w-100" src="" 
+                    alt="image" 
+                    />
+                </div>
+                <div class="card-block mx-2 my-3">
+                    <p class="card-title text-center" style="font-size: 18px;">
+                        <span id="outputAppName"></span>
+                    </p>
+                    <p class="card-text text-center" style="font-size: 18px;">
+                        <a style="color:black;" id="outputAppDevLink" target="_blank" href="https://play.google.com/store/apps/dev?id=7108292717914554935">
+                            <small><span id="outputAppDevName"></span>
+                            </small>
+                        </a>
+                    </p>
+                    <div class="container">
+                        <p class="text-center card-text">
+                        <span id="outputAppDesc"></span>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="bg-light">
+                        <div class="d-flex text-center justify-content-around">
+                            <div class="p-2" id="outputAppDownDiv">
+                              <p class="sm-text mb-0"><small>DOWNLOADS</small></p>
+                              <h4 class=""><span id="outputAppNOfDown"></span></h4>
+                            </div>                            
+                            <div class="p-2">
+                                <p class="sm-text mb-0"><small>RATING</small></p>
+                                <h4><span id="outputAppRate"></span></h4>
+                            </div>
+                            <div class="p-2">
+                                <p class="sm-text mb-0"><small>REVIEWS</small></p>
+                                <h4><span id="outputAppNOfReview"></span></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endblock content %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/page1.js' %}"></script>
+{% endblock script %}

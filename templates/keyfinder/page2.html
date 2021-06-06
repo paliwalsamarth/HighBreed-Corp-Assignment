@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title> Keyword Recommender </title>
+{% endblock title %}
+
+
+{% block content %}
+
+
+<form id="form" method="post" action="#">
+    {% csrf_token %}
+
+    <input type="hidden" id="formURL" name="formURL" value="{% url 'keyfinder:index' %}">
+
+    <div class="form-group" id="inputURLdiv">
+    <label class="text-theme" for="{{ form.inputURL.id_for_label }}">
+    <h3 class="cover-heading">Input Website Url</h3>
+    <small class="text-theme">(Recommending keywords from <span id="nOfURL">{{nOfURL}}</span> url's in database)</small>   
+    
+    </label>
+    <input class="form-control" type="url" id="{{ form.inputURL.id_for_label }}" name="inputURL" placeholder="Enter url" required>
+    </div>
+
+    <br>
+    <button type="submit" id="submitBtn" class="lead btn btn-lg btn-secondary">
+    <div id="submitBtnLoad" style="display:none;">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...
+    </div>
+    <div id="submitBtnInitial"> 
+      Get Keywords
+    </div>
+    </button> 
+</form>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content" 
+    
+    style="background-color: #eee;"
+    
+    >
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalTitle">Hey, I found some keywords</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <h5><span id="myModalNOfIn"></span> Keywords found in given url &nbsp;:-</h5>
+            <p><span id="pasteInputKeywords"></span></p>
+            <hr>
+            <h5><span id="myModalNOfOut"></span> Keywords Recommended from related url's:-</h5>
+            <p><span id="pasteOutputKeywords"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/page2.js' %}"></script>
+{% endblock script %}

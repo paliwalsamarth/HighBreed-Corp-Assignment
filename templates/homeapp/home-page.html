@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title> Home Page </title>
+{% endblock title %}
+
+{% block head %}
+    <link href="{% static 'css/typewritter.css' %}" rel="stylesheet">
+
+
+{% endblock head %}
+
+
+
+{% block content %}
+
+<div class="homepage">
+
+  <div class="container text-theme" style="font-size:3em">
+    <p>I am <span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
+  </div>
+
+</div>
+
+{% endblock content %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/typewritter.js' %}"></script>
+{% endblock script %}
