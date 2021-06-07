@@ -30,7 +30,7 @@ class AppSearchTemplateView(TemplateView):
                 storeName = form.cleaned_data["storeName"]
                 appID = form.cleaned_data["appID"]
                 appName = form.cleaned_data["appName"]
-                context = self.get_app_info(storeName, appID, appName)
+                context = get_app_info(storeName, appID, appName)
                 return HttpResponse(
                     json.dumps(context), content_type="application/json"
                 )
@@ -45,11 +45,12 @@ class AppSearchTemplateView(TemplateView):
         else:
             return redirect("appsearch:index")
 
-    def get_app_info(self, storeName, appID, appName):
-        if storeName == "apple":
-            context = get_apple_app_info(appID, appName)
-        else:
-            context = get_android_app_info(appID)
 
-        context["storeName"] = storeName
-        return context
+def get_app_info(storeName, appID, appName):
+    if storeName == "apple":
+        context = get_apple_app_info(appID, appName)
+    else:
+        context = get_android_app_info(appID)
+
+    context["storeName"] = storeName
+    return context

@@ -7,9 +7,9 @@ from django.urls import reverse
 
 from appsearch.forms import AppSearchForm
 from appsearch.utils import get_android_app_info, get_apple_app_info
+from appsearch.views import get_app_info
 
 # from django.views.generic import View
-
 
 
 class AppSearchTests(TestCase):
@@ -35,6 +35,41 @@ class AppSearchTests(TestCase):
         url = reverse("appsearch:index")
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
+
+    def test_get_app_info(self):
+        context = get_app_info("android", self.data.get("correct_android_appID"), None)
+        self.assertEqual(context["status"], "success")
+        self.assertEqual(context["message"], "App Found !")
+        self.assertEqual(
+            context["name"], self.data.get("correct_scraped_android_app_name")
+        )
+
+        context = get_app_info(
+            "android", self.data.get("incorrect_android_appID"), None
+        )
+        self.assertEqual(context["status"], "fail")
+        self.assertEqual(context["message"], "Invalid App ID")
+        self.assertIsNone(context.get("name"))
+
+        context = get_app_info(
+            "apple",
+            self.data.get("correct_apple_appID"),
+            self.data.get("correct_apple_appName"),
+        )
+        self.assertEqual(context["status"], "success")
+        self.assertEqual(context["message"], "App Found !")
+        self.assertEqual(
+            context["name"], self.data.get("correct_scraped_apple_app_name")
+        )
+
+        context2 = get_app_info(
+            "apple",
+            self.data.get("incorrect_apple_appID"),
+            self.data.get("correct_apple_appName"),
+        )
+        self.assertEqual(context2["status"], "fail")
+        self.assertEqual(context2["message"], "Invalid App ID or Name")
+        self.assertIsNone(context2.get("name"))
 
     def test_get_android_app_info(self):
         context = get_android_app_info(self.data.get("correct_android_appID"))

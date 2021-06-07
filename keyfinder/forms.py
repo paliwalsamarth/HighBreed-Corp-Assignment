@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 
 from keyfinder.models import KeywordModel, UrlModel
 from keyfinder.utils import get_keywords
@@ -9,7 +9,11 @@ class KeyFinderForm(forms.Form):
     inputURL = forms.URLField()
 
     def save(self):
-        url = self.cleaned_data.get("inputURL", None)
+        url = self.cleaned_data.get("inputURL")
+
+        # urlObj, created = UrlModel.objects.get_or_create(url=url)
+        # if created:
+
         try:
             urlObj = UrlModel.objects.get(url=url)
             return urlObj
@@ -17,8 +21,9 @@ class KeyFinderForm(forms.Form):
             allKeywords = get_keywords(url)
 
             if allKeywords is None:
-                raise ValidationError("Invalid Url")
-                # self.add_error("inputURL", "Invalid Url")
+                # raise ValidationError("Invalid Url")
+                self.add_error("inputURL", f"Request Blocked by {url}")
+
                 # means url is invalid
             else:
                 urlObj = UrlModel.objects.create(url=url)

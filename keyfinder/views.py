@@ -28,6 +28,8 @@ class KeyFinderTemplateView(TemplateView):
             try:
                 if form.is_valid():
                     url_obj = form.save()
+                    if form.errors:
+                        raise ValidationError("form errors")
                     context = recommend_keys(url_obj)
                     return HttpResponse(
                         json.dumps(context), content_type="application/json"
@@ -35,9 +37,12 @@ class KeyFinderTemplateView(TemplateView):
                 else:
                     raise ValidationError("invalid url")
             except ValidationError:
+                message = [str(i) + str(form._errors[i]) for i in form._errors]
+                # print(form.__dict__)
+                # print(message)
                 context = {
                     "status": "fail",
-                    "message": form._errors["inputURL"][0],
+                    "message": message[0],
                 }  # To display 1 error at a time
                 return HttpResponse(
                     json.dumps(context), content_type="application/json"

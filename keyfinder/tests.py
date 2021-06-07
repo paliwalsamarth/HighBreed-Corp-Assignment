@@ -1,5 +1,5 @@
 # Create your tests here.
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 # from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
@@ -10,7 +10,6 @@ from keyfinder.utils import get_keywords
 from keyfinder.views import recommend_keys
 
 # from django.views.generic import View
-
 
 
 class AppSearchTests(TestCase):
@@ -59,22 +58,23 @@ class AppSearchTests(TestCase):
         form_data = {"inputURL": self.data.get("incorrect_inputURL2")}
         form = KeyFinderForm(data=form_data)
         self.assertTrue(form.is_valid())
-        try:
-            form_obj = form.save()
-        except ValidationError:
-            pass
+        form_obj = form.save()
+        self.assertIsNone(form_obj)
+        self.assertTrue(form.errors)
 
         form_data = {"inputURL": self.data.get("correct_inputURL")}
         form = KeyFinderForm(data=form_data)
         self.assertTrue(form.is_valid())
         form_obj = form.save()
         self.assertIsNotNone(form_obj)
+        self.assertFalse(form.errors)
 
         form_data = {"inputURL": self.data.get("correct_inputURL2")}
         form = KeyFinderForm(data=form_data)
         self.assertTrue(form.is_valid())
         form_obj = form.save()
         self.assertIsNotNone(form_obj)
+        self.assertFalse(form.errors)
 
         # checking recommendation
         input_url_obj = UrlModel.objects.get(url=self.data.get("correct_inputURL2"))
