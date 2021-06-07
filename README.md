@@ -1,6 +1,10 @@
 # HighBreed-Corp-Assignment
 
 92% code coverage (tests)
+used django forms in both apps, with Ajax
+used bootstrap
+all requirements satisfied
+
 
 site for live demo - https://paliwalsamarth.pythonanywhere.com/
 
